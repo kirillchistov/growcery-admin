@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { lusitana } from '@/components/shared/fonts'
+import { inter } from '@/components/shared/fonts'
 import Image from 'next/image'
 import AppLogo from '@/components/shared/app-logo'
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ export default function Page() {
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg  px-6 py-10 md:w-2/5 md:px-20">
           <p
-            className={`${lusitana.className} text-xl md:text-3xl md:leading-normal`}
+            className={`${inter.className} text-xl md:text-3xl md:leading-normal`}
           >
             <strong>Welcome to Next 15 Admin Dashboard.</strong>
           </p>

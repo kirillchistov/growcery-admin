@@ -3,7 +3,7 @@
 import { authenticate } from '@/lib/actions/user.actions'
 import { useActionState } from 'react'
 import { ArrowRightIcon, AtSign, CircleAlert, LockKeyhole } from 'lucide-react'
-import { lusitana } from './fonts'
+import { inter } from './fonts'
 import { Button } from '../ui/button'
 
 export default function LoginForm() {
@@ -15,7 +15,7 @@ export default function LoginForm() {
   return (
     <form action={formAction}>
       <div className="flex-1 rounded-lg  px-6 pb-4 pt-8">
-        <h1 className={`${lusitana.className} mb-3 text-2xl`}>
+        <h1 className={`${inter.className} mb-3 text-2xl`}>
           Please log in to continue.
         </h1>
         <div className="w-full">

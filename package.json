@@ -1,6 +1,13 @@
 {
-  "name": "next-15-admin-dashboard",
-  "version": "0.1.0",
+  "name": "growcery",
+  "description": "Growcery - система управления клиентами и проектами",
+  "keywords": ["eGrocery", "dashboard", "data"],
+  "author": "Points Ecom",
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kirillchistov/growcery-admin.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

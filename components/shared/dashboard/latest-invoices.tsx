@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { fetchLatestInvoices } from '@/lib/actions/invoice.actions'
-import { lusitana } from '../fonts'
+import { inter } from '../fonts'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { RefreshCcw } from 'lucide-react'
@@ -11,7 +11,7 @@ export default async function LatestInvoices() {
   return (
     <Card className="flex w-full flex-col md:col-span-4">
       <CardHeader>
-        <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+        <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
           Latest Invoices
         </h2>
       </CardHeader>
@@ -47,7 +47,7 @@ export default async function LatestInvoices() {
                     </div>
                   </div>
                   <p
-                    className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                    className={`${inter.className} truncate text-sm font-medium md:text-base`}
                   >
                     {invoice.amount}
                   </p>

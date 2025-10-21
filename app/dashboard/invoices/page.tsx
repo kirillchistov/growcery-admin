@@ -1,4 +1,4 @@
-import { lusitana } from '@/components/shared/fonts'
+import { inter } from '@/components/shared/fonts'
 import Pagination from '@/components/shared/invoices/pagination'
 import InvoicesTable from '@/components/shared/invoices/table'
 import Search from '@/components/shared/search'
@@ -30,7 +30,7 @@ export default async function Page({
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1>
+        <h1 className={`${inter.className} text-2xl`}>Invoices</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search invoices..." />

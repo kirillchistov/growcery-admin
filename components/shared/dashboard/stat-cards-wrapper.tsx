@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { fetchCardData } from '@/lib/actions/invoice.actions'
 import { BanknoteIcon, ClockIcon, InboxIcon, UsersIcon } from 'lucide-react'
-import { lusitana } from '../fonts'
+import { inter } from '../fonts'
 
 const iconMap = {
   collected: BanknoteIcon,
@@ -55,7 +55,7 @@ export function StatCard({
       </CardHeader>
       <CardContent>
         <p
-          className={`${lusitana.className}
+          className={`${inter.className}
                truncate rounded-xl   p-4  text-2xl`}
         >
           {value}
