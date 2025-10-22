@@ -14,8 +14,8 @@ const links = [
     icon: Files,
   },
   { name: 'Клиенты', href: '/dashboard/customers', icon: UsersIcon },
-  { name: 'Проекты', href: '/dashboard/projects', icon: UsersIcon },
-  { name: 'Дашборды', href: '/dashboard/dashboards', icon: UsersIcon },
+  // { name: 'Проекты', href: '/dashboard/projects', icon: UsersIcon },
+  // { name: 'Дашборды', href: '/dashboard/dashboards', icon: UsersIcon },
 ]
 
 export default function NavLinks() {
