@@ -1,22 +1,22 @@
 import Breadcrumbs from '@/components/shared/invoices/breadcrumbs'
-import EditInvoiceForm from '@/components/shared/invoices/edit-form'
+import EditProjectForm from '@/components/shared/projects/edit-form'
 import { fetchCustomers } from '@/lib/actions/customer.actions'
-import { fetchInvoiceById } from '@/lib/actions/invoice.actions'
+import { fetchProjectById } from '@/lib/actions/project.actions'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Edit Invoice',
+  title: 'Редактировать проект',
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id
-  const [invoice, customers] = await Promise.all([
-    fetchInvoiceById(id),
+  const [project, customers] = await Promise.all([
+    fetchProjectById(id),
     fetchCustomers(),
   ])
 
-  if (!invoice) {
+  if (!project) {
     notFound()
   }
 
@@ -24,15 +24,15 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Биллинг', href: '/dashboard/invoices' },
+          { label: 'Проекты', href: '/dashboard/projects' },
           {
-            label: 'Редактировать счет',
-            href: `/dashboard/invoices/${id}/edit`,
+            label: 'Редактировать проект',
+            href: `/dashboard/projects/${id}/edit`,
             active: true,
           },
         ]}
       />
-      <EditInvoiceForm invoice={invoice} customers={customers} />
+      <EditProjectForm project={project} customers={customers} />
     </main>
   )
 }

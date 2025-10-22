@@ -7,13 +7,15 @@ import { cn } from '@/lib/utils'
 import { Files, HomeIcon, UsersIcon } from 'lucide-react'
 
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Главная', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Invoices',
+    name: 'Биллинг',
     href: '/dashboard/invoices',
     icon: Files,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UsersIcon },
+  { name: 'Клиенты', href: '/dashboard/customers', icon: UsersIcon },
+  { name: 'Проекты', href: '/dashboard/projects', icon: UsersIcon },
+  { name: 'Дашборды', href: '/dashboard/dashboards', icon: UsersIcon },
 ]
 
 export default function NavLinks() {

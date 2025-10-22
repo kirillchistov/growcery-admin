@@ -9,7 +9,7 @@ export default async function RevenueChartWrapper() {
     <Card className="w-full md:col-span-4">
       <CardHeader>
         <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
-          Recent Revenue
+          Новая выручка
         </h2>
       </CardHeader>
       <CardContent className="p-0">

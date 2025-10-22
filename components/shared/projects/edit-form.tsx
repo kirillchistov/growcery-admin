@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { State, updateInvoice } from '@/lib/actions/invoice.actions'
-import { CustomerField, InvoiceForm } from '@/types'
+import { State, updateProject } from '@/lib/actions/project.actions'
+import { CustomerField, ProjectForm } from '@/types'
 import {
   CheckIcon,
   ClockIcon,
@@ -11,16 +11,16 @@ import {
 import Link from 'next/link'
 import { useActionState } from 'react'
 
-export default function EditInvoiceForm({
-  invoice,
+export default function EditProjectForm({
+  project,
   customers,
 }: {
-  invoice: InvoiceForm
+  project: ProjectForm
   customers: CustomerField[]
 }) {
   const initialState: State = { message: null, errors: {} }
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id)
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState)
+  const updateProjectWithId = updateProject.bind(null, project.id)
+  const [state, formAction] = useActionState(updateProjectWithId, initialState)
 
   return (
     <form action={formAction}>
@@ -28,14 +28,14 @@ export default function EditInvoiceForm({
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Клиент
+            Выберите клиента
           </label>
           <div className="relative">
             <select
               id="customer"
               name="customerId"
               className="peer block w-full cursor-pointer rounded-md border   py-2 pl-10 text-sm outline-2  "
-              defaultValue={invoice.customer_id}
+              defaultValue={project.customer_id}
               aria-describedby="customer-error"
             >
               <option value="" disabled>
@@ -60,30 +60,30 @@ export default function EditInvoiceForm({
           </div>
         </div>
 
-        {/* Invoice Amount */}
+        {/* Название проекта */}
         <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Сумма счета
+          <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            Укажите название
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="amount"
-                name="amount"
-                type="number"
-                defaultValue={invoice.amount}
+                id="name"
+                name="name"
+                type="text"
+                defaultValue={'Новый проект 1021'}
                 step="0.01"
-                placeholder="Укажите сумму счета в рублях"
+                placeholder="Укажите название проекта"
                 className="peer block w-full rounded-md border   py-2 pl-10 text-sm outline-2  "
-                aria-describedby="amount-error"
+                aria-describedby="name-error"
               />
               {/* <DollarSignIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " /> */}
             </div>
           </div>
 
-          <div id="amount-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.amount &&
-              state.errors.amount.map((error: string) => (
+          <div id="name-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.name &&
+              state.errors.name.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -91,10 +91,10 @@ export default function EditInvoiceForm({
           </div>
         </div>
 
-        {/* Invoice Status */}
+        {/* Project Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Укажите статус оплаты счета
+            Укажите статус проекта
           </legend>
           <div className="rounded-md border  px-[14px] py-3">
             <div className="flex gap-4">
@@ -104,30 +104,30 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="pending"
-                  defaultChecked={invoice.status === 'pending'}
+                  defaultChecked={project.status === 'pending'}
                   className="h-4 w-4   focus:ring-2"
                 />
                 <label
                   htmlFor="pending"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full  px-3 py-1.5 text-xs font-medium  "
                 >
-                  Ожидает оплаты <ClockIcon className="h-4 w-4" />
+                  Pending <ClockIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
                 <input
-                  id="paid"
+                  id="ready"
                   name="status"
                   type="radio"
-                  value="paid"
-                  defaultChecked={invoice.status === 'paid'}
+                  value="ready"
+                  defaultChecked={project.status === 'ready'}
                   className="h-4 w-4  focus:ring-2"
                 />
                 <label
-                  htmlFor="paid"
+                  htmlFor="ready"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full   px-3 py-1.5 text-xs font-medium  "
                 >
-                  Оплачен <CheckIcon className="h-4 w-4" />
+                  Ready <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
             </div>
@@ -150,10 +150,10 @@ export default function EditInvoiceForm({
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Button variant="ghost">
-          <Link href="/dashboard/invoices">Отмена</Link>
+          <Link href="/dashboard/projects">Отмена</Link>
         </Button>
 
-        <Button type="submit">Редактировать счет</Button>
+        <Button type="submit">Редактировать проект</Button>
       </div>
     </form>
   )

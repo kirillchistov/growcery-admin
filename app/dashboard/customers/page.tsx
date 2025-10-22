@@ -3,7 +3,7 @@ import { fetchFilteredCustomers } from '@/lib/actions/customer.actions'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Customers',
+  title: 'Клиенты',
 }
 
 export default async function Page({

@@ -21,3 +21,20 @@ export type InvoiceForm = {
   amount: number
   status: 'pending' | 'paid'
 }
+
+export type ProjectForm = {
+  id: string
+  name: string
+  customer_id: string
+  status: 'pending' | 'ready'
+}
+
+export type DashboardForm = {
+  id: string
+  name: string
+  url: string
+  customer_id: string
+  project_id: string
+  status: 'pending' | 'ready'
+}
+

@@ -1,27 +1,27 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { fetchLatestInvoices } from '@/lib/actions/invoice.actions'
+import { fetchLatestProjects } from '@/lib/actions/project.actions'
 import { inter } from '../fonts'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { RefreshCcw } from 'lucide-react'
 
-export default async function LatestInvoices() {
-  const latestInvoices = await fetchLatestInvoices()
+export default async function LatestProjects() {
+  const latestProjects = await fetchLatestProjects()
 
   return (
     <Card className="flex w-full flex-col md:col-span-4">
       <CardHeader>
         <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
-          Последние счета
+          Последние проекты
         </h2>
       </CardHeader>
       <CardContent>
         <div>
           <div>
-            {latestInvoices.map((invoice, i) => {
+            {latestProjects.map((project, i) => {
               return (
                 <div
-                  key={invoice.id}
+                  key={project.id}
                   className={cn(
                     'flex flex-row items-center justify-between py-4',
                     {
@@ -31,25 +31,25 @@ export default async function LatestInvoices() {
                 >
                   <div className="flex items-center">
                     <Image
-                      src={invoice.image_url}
-                      alt={`${invoice.name} фото профиля`}
+                      src={project.image_url}
+                      alt={`${project.name} фото профиля`}
                       className="mr-4 rounded-full"
                       width={32}
                       height={32}
                     />
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold md:text-base">
-                        {invoice.name}
+                        {project.name}
                       </p>
                       <p className="hidden text-sm text-gray-500 sm:block">
-                        {invoice.email}
+                        {project.email}
                       </p>
                     </div>
                   </div>
                   <p
                     className={`${inter.className} truncate text-sm font-medium md:text-base`}
                   >
-                    {invoice.amount}
+                    {project.amount}
                   </p>
                 </div>
               )

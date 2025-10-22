@@ -1,5 +1,5 @@
 import '@/db/env-config'
-import { customers, invoices, revenue, users } from '@/lib/placeholder-data'
+import { customers, invoices, revenue, projects, dashboards, users } from '@/lib/placeholder-data'
 import db from './drizzle'
 import * as schema from './schema'
 import { exit } from 'process'
@@ -9,12 +9,16 @@ const main = async () => {
     await db.transaction(async (tx) => {
       await tx.delete(schema.revenue)
       await tx.delete(schema.invoices)
+      await tx.delete(schema.projects)
+      await tx.delete(schema.dashboards)
       await tx.delete(schema.customers)
       await tx.delete(schema.users)
 
       await tx.insert(schema.users).values(users)
       await tx.insert(schema.customers).values(customers)
       await tx.insert(schema.invoices).values(invoices)
+      await tx.insert(schema.projects).values(projects)
+      await tx.insert(schema.dashboards).values(dashboards)
       await tx.insert(schema.revenue).values(revenue)
     })
 

@@ -54,7 +54,41 @@ export function InvoiceSkeleton() {
   )
 }
 
+export function ProjectSkeleton() {
+  return (
+    <div className="flex flex-row items-center justify-between border-b   py-4">
+      <div className="flex items-center space-x-4">
+        <Skeleton className="w-6 h-6 rounded-full" />
+        <div className="min-w-0 space-y-2">
+          <Skeleton className="w-20 h-6" />
+          <Skeleton className="w-20 h-6" />
+        </div>
+      </div>
+      <Skeleton className="w-20 h-6" />
+    </div>
+  )
+}
+
 export function LatestInvoicesSkeleton() {
+  return (
+    <Card className="flex w-full flex-col md:col-span-4">
+      <CardHeader>
+        <Skeleton className="w-36 h-6 mb-4" />
+      </CardHeader>
+      <CardContent>
+        <div>
+          <InvoiceSkeleton />
+          <InvoiceSkeleton />
+          <InvoiceSkeleton />
+          <InvoiceSkeleton />
+          <InvoiceSkeleton />
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export function LatestProjectsSkeleton() {
   return (
     <Card className="flex w-full flex-col md:col-span-4">
       <CardHeader>
@@ -170,19 +204,19 @@ export function InvoicesTableSkeleton() {
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
+                  Клиент
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Email
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
+                  Сумма
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date
+                  Дата
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  Статус
                 </th>
                 <th
                   scope="col"

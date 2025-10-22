@@ -60,3 +60,27 @@ export const invoices = pgTable('invoices', {
   status: varchar('status', { length: 255 }).notNull(),
   date: date('date').notNull(),
 })
+
+export const projects = pgTable('projects', {
+  id: uuid('id')
+    .default(sql`uuid_generate_v4()`)
+    .primaryKey()
+    .notNull(),
+  customer_id: uuid('customer_id').notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  status: varchar('status', { length: 255 }).notNull(),
+  date: date('date').notNull(),
+})
+
+export const dashboards = pgTable('dashboards', {
+  id: uuid('id')
+    .default(sql`uuid_generate_v4()`)
+    .primaryKey()
+    .notNull(),
+  customer_id: uuid('customer_id').notNull(),
+  project_id: uuid('project_id').notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  url: varchar('name', { length: 255 }).notNull(),
+  status: varchar('status', { length: 255 }).notNull(),
+  date: date('date').notNull(),
+})

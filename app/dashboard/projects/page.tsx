@@ -1,17 +1,17 @@
 import { inter } from '@/components/shared/fonts'
-import Pagination from '@/components/shared/invoices/pagination'
-import InvoicesTable from '@/components/shared/invoices/table'
+import Pagination from '@/components/shared/projects/pagination'
+import ProjectsTable from '@/components/shared/projects/table'
 import Search from '@/components/shared/search'
 import { InvoicesTableSkeleton } from '@/components/shared/skeletons'
 import { Button } from '@/components/ui/button'
-import { fetchInvoicesPages } from '@/lib/actions/invoice.actions'
+import { fetchProjectsPages } from '@/lib/actions/project.actions'
 import { PlusIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Биллинг',
+  title: 'Проекты',
 }
 
 export default async function Page({
@@ -25,7 +25,7 @@ export default async function Page({
   const query = searchParams?.query || ''
   const currentPage = Number(searchParams?.page) || 1
 
-  const totalPages = await fetchInvoicesPages(query)
+  const totalPages = await fetchProjectsPages(query)
 
   return (
     <div className="w-full">
@@ -35,14 +35,14 @@ export default async function Page({
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Поиск счета..." />
         <Button asChild>
-          <Link href="/dashboard/invoices/create">
+          <Link href="/dashboard/projects/create">
             <span className="hidden md:block">Создать счет</span>
             <PlusIcon className="h-5 md:ml-4" />
           </Link>
         </Button>
       </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-        <InvoicesTable query={query} currentPage={currentPage} />
+        <ProjectsTable query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />

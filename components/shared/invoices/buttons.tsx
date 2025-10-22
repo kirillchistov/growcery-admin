@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { DeleteButton } from '@/components/shared/DeleteButton';
 import { deleteInvoice } from '@/lib/actions/invoice.actions'
 import { PencilIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -13,15 +14,19 @@ export function UpdateInvoice({ id }: { id: string }) {
   )
 }
 
-export function DeleteInvoice({ id }: { id: string }) {
-  const deleteInvoiceWithId = deleteInvoice.bind(null, id)
+// export function DeleteInvoice({ id }: { id: string }) {
+//   const deleteInvoiceWithId = deleteInvoice.bind(null, id)
 
-  return (
-    <form action={deleteInvoiceWithId}>
-      <Button variant="outline" type="submit">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
-      </Button>
-    </form>
-  )
+//   return (
+//     <form action={deleteInvoiceWithId}>
+//       <Button variant="outline" type="submit">
+//         <span className="sr-only">Delete</span>
+//         <TrashIcon className="w-5" />
+//       </Button>
+//     </form>
+//   )
+// }
+
+export function DeleteInvoice({ id }: { id: string }) {
+  return <DeleteButton action={deleteInvoice} id={id} />;
 }
