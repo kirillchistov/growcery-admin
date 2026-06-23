@@ -18,9 +18,10 @@ export async function fetchLatestDashboards() {
         image_url: customers.image_url,
         email: customers.email,
         id: dashboards.id,
+        dash_url: dashboards.dash_url,
       })
       .from(dashboards)
-      .innerJoin(customers, eq(dashboards.customer_id, customers.id))
+      .innerJoin(customers, eq(dashboards.project_id, projects.id))
       .orderBy(desc(dashboards.date))
       .limit(5)
 
@@ -57,13 +58,13 @@ export async function fetchFilteredDashboards(
         id: dashboards.id,
         name: customers.name,
         email: customers.email,
-        url: dashboards.url,
+        dash_url: dashboards.dash_url,
         image_url: customers.image_url,
         status: dashboards.status,
         date: dashboards.date,
       })
       .from(dashboards)
-      .innerJoin(customers, eq(dashboards.customer_id, customers.id))
+      .innerJoin(projects, eq(dashboards.project_id, projects.id))
       .where(
         or(
           ilike(customers.name, sql`${`%${query}%`}`),
@@ -89,7 +90,7 @@ export async function fetchDashboardsPages(query: string) {
         count: count(),
       })
       .from(dashboards)
-      .innerJoin(customers, eq(dashboards.customer_id, customers.id))
+      .innerJoin(projects, eq(projects.customer_id, projects.id))
       .where(
         or(
           ilike(customers.name, sql`${`%${query}%`}`),
@@ -110,11 +111,8 @@ const FormSchema = z.object({
   name: z.string({
     invalid_type_error: 'Пожалуйста, укажите название дашборда.',
   }),
-  url: z.string({
+  dash_url: z.string({
     invalid_type_error: 'Пожалуйста, укажите URL дашборда.',
-  }),
-  customerId: z.string({
-    invalid_type_error: 'Пожалуйста, выберите клиента.',
   }),
   projectId: z.string({
     invalid_type_error: 'Пожалуйста, выберите проект.',
@@ -143,7 +141,7 @@ export async function createDashboard(prevState: State, formData: FormData) {
     customerId: formData.get('customerId'),
     projectId: formData.get('projectId'),
     name: formData.get('name'),
-    url: formData.get('url'),
+    dash_url: formData.get('dash_url'),
     status: formData.get('status'),
   })
 
@@ -156,17 +154,16 @@ export async function createDashboard(prevState: State, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { customerId, projectId, name, url, status } = validatedFields.data
+  const { projectId, name, dash_url, status } = validatedFields.data
   // const amountInCents = amount * 100
   const date = new Date().toISOString().split('T')[0]
 
   // Insert data into the database
   try {
     await db.insert(dashboards).values({
-      customer_id: customerId,
       project_id: projectId,
       name,
-      url,
+      dash_url,
       status,
       date,
     })
@@ -200,13 +197,12 @@ export async function updateDashboard(
     }
   }
 
-  const { customerId, projectId, name, status } = validatedFields.data
+  const { projectId, name, status } = validatedFields.data
   
   try {
     await db
       .update(dashboards)
       .set({
-        customer_id: customerId,
         project_id: projectId,
         name,
         status,
@@ -224,10 +220,9 @@ export async function fetchDashboardById(id: string) {
     const data = await db
       .select({
         id: dashboards.id,
-        customer_id: dashboards.customer_id,
         project_id: dashboards.project_id,
         name: dashboards.name,
-        url: dashboards.url,
+        dash_url: dashboards.dash_url,
         status: dashboards.status,
         date: dashboards.date,
       })

@@ -6,6 +6,7 @@ import {
   integer,
   text,
   date,
+  timestamp,
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 
@@ -17,6 +18,8 @@ export const customers = pgTable('customers', {
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull(),
   image_url: varchar('image_url', { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 50 }),
+  createdAt: timestamp("created_at").defaultNow()
 })
 
 export const revenue = pgTable(
@@ -59,17 +62,18 @@ export const invoices = pgTable('invoices', {
   amount: integer('amount').notNull(),
   status: varchar('status', { length: 255 }).notNull(),
   date: date('date').notNull(),
+  project_id: uuid('project_id').references(() => projects.id, { onDelete: 'set null' }),
 })
 
 export const projects = pgTable('projects', {
-  id: uuid('id')
-    .default(sql`uuid_generate_v4()`)
-    .primaryKey()
-    .notNull(),
-  customer_id: uuid('customer_id').notNull(),
+  id: uuid('id').defaultRandom().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  status: varchar('status', { length: 255 }).notNull(),
-  date: date('date').notNull(),
+  customer_id: uuid('customer_id')
+    .notNull()
+    .references(() => customers.id, { onDelete: 'cascade' }),
+  dash_url: varchar('dash_url', { length: 500 }),
+  status: varchar('status', { length: 255 }).notNull().default('pending'),
+  created_at: timestamp('created_at').defaultNow().notNull(),
 })
 
 export const dashboards = pgTable('dashboards', {
@@ -77,10 +81,9 @@ export const dashboards = pgTable('dashboards', {
     .default(sql`uuid_generate_v4()`)
     .primaryKey()
     .notNull(),
-  customer_id: uuid('customer_id').notNull(),
   project_id: uuid('project_id').notNull(),
   name: varchar('name', { length: 255 }).notNull(),
-  url: varchar('name', { length: 255 }).notNull(),
+  dash_url: varchar('dash_url', { length: 255 }).notNull(),
   status: varchar('status', { length: 255 }).notNull(),
   date: date('date').notNull(),
 })

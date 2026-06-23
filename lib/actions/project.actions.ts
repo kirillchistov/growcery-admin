@@ -9,32 +9,107 @@ import { z } from 'zod'
 import { redirect } from 'next/navigation'
 import { ProjectForm } from '@/types'
 
+const FormSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, { message: 'Пожалуйста, укажите название проекта.' }),
+  customerId: z.string({
+    invalid_type_error: 'Пожалуйста, выберите клиента.',
+  }),
+  dashUrl: z
+    .string()
+    .url({ message: 'Пожалуйста, укажите корректный URL.' })
+    .optional()
+    .or(z.literal('')),
+  status: z.enum(['pending', 'ready'], {
+    invalid_type_error: 'Пожалуйста, выберите статус проекта.',
+  }),
+  createdAt: z.string(),
+})
 
-export async function fetchLatestProjects() {
-  try {
-    const data = await db
-      .select({
-        name: projects.name,
-        customers_name: customers.name,
-        image_url: customers.image_url,
-        email: customers.email,
-        id: projects.id,
-      })
-      .from(projects)
-      .innerJoin(customers, eq(projects.customer_id, customers.id))
-      .orderBy(desc(projects.date))
-      .limit(5)
+const CreateProject = FormSchema.omit({ id: true, createdAt: true })
+const UpdateProject = FormSchema.omit({ createdAt: true, id: true })
 
-    const latestProjects = data.map((project) => ({
-      ...project,
-      name: project.name,
-    }))
-
-    return latestProjects
-  } catch (error) {
-    console.error('Ошибка БД:', error)
-    throw new Error('Не удалось загрузить последние проекты.')
+export type State = {
+  errors?: {
+    name?: string[]
+    customerId?: string[]
+    dashUrl?: string[]
+    status?: string[]
   }
+  message?: string | null
+}
+
+export async function createProject(prevState: State, formData: FormData) {
+  const validatedFields = CreateProject.safeParse({
+    name: formData.get('name'),
+    customerId: formData.get('customerId'),
+    dashUrl: formData.get('dashUrl'),
+    status: formData.get('status'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Не заполнены обязательные поля. Проект не был создан.',
+    }
+  }
+
+  const { name, customerId, dashUrl, status } = validatedFields.data
+
+  try {
+    await db.insert(projects).values({
+      name,
+      customer_id: customerId,
+      dash_url: dashUrl || null,
+      status,
+    })
+  } catch (error) {
+    return {
+      message: 'Ошибка БД: Не удалось создать проект.',
+    }
+  }
+
+  revalidatePath('/dashboard/projects')
+  redirect('/dashboard/projects')
+}
+
+export async function updateProject(
+  id: string,
+  prevState: State,
+  formData: FormData
+) {
+  const validatedFields = UpdateProject.safeParse({
+    name: formData.get('name'),
+    customerId: formData.get('customerId'),
+    dashUrl: formData.get('dashUrl'),
+    status: formData.get('status'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Не заполнены обязательные поля. Проект не был обновлен.',
+    }
+  }
+
+  const { name, customerId, dashUrl, status } = validatedFields.data
+
+  try {
+    await db
+      .update(projects)
+      .set({
+        name,
+        customer_id: customerId,
+        dash_url: dashUrl || null,
+        status,
+      })
+      .where(eq(projects.id, id))
+  } catch (error) {
+    return { message: 'Ошибка БД: Не удалось обновить проект.' }
+  }
+
+  revalidatePath('/dashboard/projects')
+  redirect('/dashboard/projects')
 }
 
 export async function deleteProject(id: string) {
@@ -44,6 +119,34 @@ export async function deleteProject(id: string) {
     return { message: 'Проект удален' }
   } catch (error) {
     return { message: 'Ошибка БД: Не удалось удалить проект.' }
+  }
+}
+
+export async function fetchProjectById(id: string) {
+  try {
+    const data = await db
+      .select({
+        id: projects.id,
+        name: projects.name,
+        customer_id: projects.customer_id,
+        dash_url: projects.dash_url,
+        status: projects.status,
+        created_at: projects.created_at,
+      })
+      .from(projects)
+      .where(eq(projects.id, id))
+
+    const project = data[0]
+    if (!project) return undefined
+
+    return {
+      ...project,
+      dash_url: project.dash_url ?? '',
+      status: project.status === 'ready' ? 'ready' : 'pending',
+    } as ProjectForm
+  } catch (error) {
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить проект.')
   }
 }
 
@@ -57,22 +160,24 @@ export async function fetchFilteredProjects(
       .select({
         id: projects.id,
         name: projects.name,
-        customers_name: customers.name,
+        customer_name: customers.name,
         email: customers.email,
         image_url: customers.image_url,
+        dash_url: projects.dash_url,
         status: projects.status,
-        date: projects.date,
+        created_at: projects.created_at,
       })
       .from(projects)
       .innerJoin(customers, eq(projects.customer_id, customers.id))
       .where(
         or(
+          ilike(projects.name, sql`${`%${query}%`}`),
           ilike(customers.name, sql`${`%${query}%`}`),
           ilike(customers.email, sql`${`%${query}%`}`),
           ilike(projects.status, sql`${`%${query}%`}`)
         )
       )
-      .orderBy(desc(projects.date))
+      .orderBy(desc(projects.created_at))
       .limit(ITEMS_PER_PAGE)
       .offset(offset)
 
@@ -83,33 +188,9 @@ export async function fetchFilteredProjects(
   }
 }
 
-// export async function fetchProjectsPages(query: string) {
-//   try {
-//     const data = await db
-//       .select({
-//         count: count(),
-//       })
-//       .from(projects)
-//       .innerJoin(customers, eq(projects.customer_id, customers.id))
-//       .where(
-//         or(
-//           ilike(customers.name, sql`${`%${query}%`}`),
-//           ilike(customers.email, sql`${`%${query}%`}`),
-//           ilike(projects.status, sql`${`%${query}%`}`)
-//         )
-//       )
-//     const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE)
-//     return totalPages
-//   } catch (error) {
-//     console.error('Ошибка БД:', error)
-//     throw new Error('Не удалось загрузить количество проектов.')
-//   }
-// }
-
 export async function fetchProjectsPages(query: string) {
   try {
-    // Получаем общее количество записей
-    const result = await db
+    const data = await db
       .select({
         count: count(),
       })
@@ -117,152 +198,59 @@ export async function fetchProjectsPages(query: string) {
       .innerJoin(customers, eq(projects.customer_id, customers.id))
       .where(
         or(
+          ilike(projects.name, sql`${`%${query}%`}`),
           ilike(customers.name, sql`${`%${query}%`}`),
           ilike(customers.email, sql`${`%${query}%`}`),
           ilike(projects.status, sql`${`%${query}%`}`)
         )
-      );
-
-    // Проверяем результат
-    if (!result || result.length === 0) {
-      return 0;
-    }
-
-    // Получаем значение count
-    const totalCount = Number(result[0].count);
-    
-    // Рассчитываем количество страниц
-    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-    return totalPages;
+      )
+    const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE)
+    return totalPages
   } catch (error) {
-    console.error('Ошибка при получении количества проектов:', error);
-    throw new Error('Не удалось получить количество проектов.');
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить количество проектов.')
   }
 }
 
-const FormSchema = z.object({
-  id: z.string(),
-  name: z.string({
-    invalid_type_error: 'Пожалуйста, укажите название.',
-  }),
-  customerId: z.string({
-    invalid_type_error: 'Пожалуйста, выберите клиента.',
-  }),
-  status: z.enum(['pending', 'ready'], {
-    invalid_type_error: 'Пожалуйста, выберите статус проекта.',
-  }),
-  date: z.string(),
-})
-const CreateProject = FormSchema.omit({ id: true, date: true })
-const UpdateProject = FormSchema.omit({ date: true, id: true })
-
-export type State = {
-  errors?: {
-    customerId?: string[]
-    name?: string[]
-    status?: string[]
-  }
-  message?: string | null
-}
-
-export async function createProject(prevState: State, formData: FormData) {
-  // Validate form fields using Zod
-  const validatedFields = CreateProject.safeParse({
-    customerId: formData.get('customerId'),
-    name: formData.get('name'),
-    status: formData.get('status'),
-  })
-
-  // If form validation fails, return errors early. Otherwise, continue.
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Не заполнены обязательные поля. Проект не был создан.',
-    }
-  }
-
-  // Prepare data for insertion into the database
-  const { customerId, name, status } = validatedFields.data
-  // const amountInCents = amount * 100
-  const date = new Date().toISOString().split('T')[0]
-
-  // Insert data into the database
-  try {
-    await db.insert(projects).values({
-      customer_id: customerId,
-      name,
-      status,
-      date,
-    })
-  } catch (error) {
-    // If a database error occurs, return a more specific error.
-    return {
-      message: 'Ошибка БД: Не удалось создать проект.',
-    }
-  }
-  // Revalidate the cache for the projects page and redirect the user.
-  revalidatePath('/dashboard/projects')
-  redirect('/dashboard/projects')
-}
-
-export async function updateProject(
-  id: string,
-  prevState: State,
-  formData: FormData
-) {
-  const validatedFields = UpdateProject.safeParse({
-    customerId: formData.get('customerId'),
-    name: formData.get('name'),
-    status: formData.get('status'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Не заполнены обязательные поля. Проект не был обновлен.',
-    }
-  }
-
-  const { customerId, name, status } = validatedFields.data
-  
-  try {
-    await db
-      .update(projects)
-      .set({
-        customer_id: customerId,
-        name,
-        status,
-      })
-      .where(eq(projects.id, id))
-  } catch (error) {
-    return { message: 'Ошибка БД: Не удалось обновить проект.' }
-  }
-  revalidatePath('/dashboard/projects')
-  redirect('/dashboard/projects')
-}
-
-export async function fetchProjectById(id: string) {
+export async function fetchAllProjects() {
   try {
     const data = await db
       .select({
         id: projects.id,
-        customer_id: projects.customer_id,
         name: projects.name,
-        status: projects.status,
-        date: projects.date,
       })
       .from(projects)
-      .where(eq(projects.id, id))
+      .orderBy(desc(projects.created_at))
 
-    const project = data.map((project) => ({
-      ...project,
-      status: project.status === 'ready' ? 'ready' : 'pending',
-      name: project.name,
-    }))
-
-    return project[0] as ProjectForm
+    return data
   } catch (error) {
     console.error('Ошибка БД:', error)
-    throw new Error('Не удалось загрузить проект.')
+    throw new Error('Не удалось загрузить список проектов.')
+  }
+}
+
+export async function fetchLatestProjects() {
+  try {
+    const data = await db
+      .select({
+        id: projects.id,
+        name: projects.name,
+        customer_name: customers.name,
+        image_url: customers.image_url,
+        email: customers.email,
+        status: projects.status,
+      })
+      .from(projects)
+      .innerJoin(customers, eq(projects.customer_id, customers.id))
+      .orderBy(desc(projects.created_at))
+      .limit(5)
+
+    return data.map((project) => ({
+      ...project,
+      amount: project.status === 'ready' ? 'Готов' : 'В работе',
+    }))
+  } catch (error) {
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить последние проекты.')
   }
 }

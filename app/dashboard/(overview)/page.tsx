@@ -1,4 +1,5 @@
-import LatestInvoices from '@/components/shared/dashboard/latest-invoices'
+// import LatestInvoices from '@/components/shared/dashboard/latest-invoices'
+import LatestProjects from '@/components/shared/dashboard/latest-projects'
 import RevenueChartWrapper from '@/components/shared/dashboard/revenue-chart-wrapper'
 import StatCardsWrapper from '@/components/shared/dashboard/stat-cards-wrapper'
 import { inter } from '@/components/shared/fonts'
@@ -25,7 +26,7 @@ export default async function Page() {
           <RevenueChartWrapper />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
+          <LatestProjects />
         </Suspense>
       </div>
     </main>

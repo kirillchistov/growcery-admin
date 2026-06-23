@@ -4,17 +4,17 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Files, HomeIcon, UsersIcon } from 'lucide-react'
+import { Files, FolderKanban, HomeIcon, UsersIcon } from 'lucide-react'
 
 const links = [
   { name: 'Главная', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Биллинг',
+    name: 'Счета',
     href: '/dashboard/invoices',
     icon: Files,
   },
   { name: 'Клиенты', href: '/dashboard/customers', icon: UsersIcon },
-  // { name: 'Проекты', href: '/dashboard/projects', icon: UsersIcon },
+  { name: 'Проекты', href: '/dashboard/projects', icon: FolderKanban },
   // { name: 'Дашборды', href: '/dashboard/dashboards', icon: UsersIcon },
 ]
 

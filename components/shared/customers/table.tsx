@@ -2,6 +2,7 @@ import { FormattedCustomersTable } from '@/types'
 import { inter } from '../fonts'
 import Search from '../search'
 import Image from 'next/image'
+import { DeleteCustomerButton, UpdateCustomer } from './buttons'
 
 export default async function CustomersTable({
   customers,
@@ -10,19 +11,15 @@ export default async function CustomersTable({
 }) {
   return (
     <div className="w-full">
-      <h1 className={`${inter.className} mb-8 text-xl md:text-2xl`}>
-        Клиенты
-      </h1>
-      <Search placeholder="Поиск клиентов..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md  p-2 md:pt-0">
+            <div className="overflow-hidden rounded-md p-2 md:pt-0">
               <div className="md:hidden">
                 {customers?.map((customer) => (
                   <div
                     key={customer.id}
-                    className="mb-2 w-full rounded-md  p-4"
+                    className="mb-2 w-full rounded-md p-4"
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -51,14 +48,18 @@ export default async function CustomersTable({
                         <p className="font-medium">{customer.total_paid}</p>
                       </div>
                     </div>
-                    <div className="pt-4 text-sm">
+                    <div className="flex items-center justify-between pt-4 text-sm">
                       <p>{customer.total_invoices} счетов</p>
+                      <div className="flex gap-2">
+                        <UpdateCustomer id={customer.id} />
+                        <DeleteCustomerButton id={customer.id} />
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <table className="hidden min-w-full rounded-md  md:table">
-                <thead className="rounded-md  text-left text-sm font-normal">
+              <table className="hidden min-w-full rounded-md md:table">
+                <thead className="rounded-md text-left text-sm font-normal">
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                       Имя
@@ -67,7 +68,7 @@ export default async function CustomersTable({
                       Email
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Счетов на сумму
+                      Счетов
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
                       Не оплачено
@@ -75,13 +76,16 @@ export default async function CustomersTable({
                     <th scope="col" className="px-4 py-5 font-medium">
                       Оплачено
                     </th>
+                    <th scope="col" className="relative py-3 pl-6 pr-3">
+                      <span className="sr-only">Редактировать</span>
+                    </th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y">
                   {customers.map((customer) => (
                     <tr key={customer.id} className="group">
-                      <td className="whitespace-nowrap  py-5 pl-4 pr-3 text-sm  group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
+                      <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
                           <Image
                             src={customer.image_url}
@@ -93,17 +97,23 @@ export default async function CustomersTable({
                           <p>{customer.name}</p>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap  px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {customer.email}
                       </td>
-                      <td className="whitespace-nowrap   px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {customer.total_invoices}
                       </td>
-                      <td className="whitespace-nowrap   px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {customer.total_pending}
                       </td>
-                      <td className="whitespace-nowrap   px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
                         {customer.total_paid}
+                      </td>
+                      <td className="whitespace-nowrap py-5 pl-6 pr-3">
+                        <div className="flex justify-end gap-3">
+                          <UpdateCustomer id={customer.id} />
+                          <DeleteCustomerButton id={customer.id} />
+                        </div>
                       </td>
                     </tr>
                   ))}
