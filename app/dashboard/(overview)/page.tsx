@@ -1,4 +1,5 @@
-import LatestInvoices from '@/components/shared/dashboard/latest-invoices'
+// import LatestInvoices from '@/components/shared/dashboard/latest-invoices'
+import LatestProjects from '@/components/shared/dashboard/latest-projects'
 import RevenueChartWrapper from '@/components/shared/dashboard/revenue-chart-wrapper'
 import StatCardsWrapper from '@/components/shared/dashboard/stat-cards-wrapper'
 import { inter } from '@/components/shared/fonts'
@@ -13,7 +14,7 @@ export default async function Page() {
   return (
     <main>
       <h1 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
+        Главная
       </h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
@@ -25,7 +26,7 @@ export default async function Page() {
           <RevenueChartWrapper />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
+          <LatestProjects />
         </Suspense>
       </div>
     </main>

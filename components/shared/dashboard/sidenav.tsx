@@ -29,7 +29,7 @@ export default function SideNav() {
               className="w-full justify-start text-muted-foreground"
             >
               <PowerIcon className="w-6 mr-2" />
-              <div className="hidden md:block">Sign Out</div>
+              <div className="hidden md:block">Выйти</div>
             </Button>
           </form>
         </div>

@@ -12,7 +12,7 @@ export default async function LatestInvoices() {
     <Card className="flex w-full flex-col md:col-span-4">
       <CardHeader>
         <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
-          Latest Invoices
+          Последние счета
         </h2>
       </CardHeader>
       <CardContent>
@@ -32,7 +32,7 @@ export default async function LatestInvoices() {
                   <div className="flex items-center">
                     <Image
                       src={invoice.image_url}
-                      alt={`${invoice.name}'s profile picture`}
+                      alt={`${invoice.name} фото профиля`}
                       className="mr-4 rounded-full"
                       width={32}
                       height={32}
@@ -57,7 +57,7 @@ export default async function LatestInvoices() {
           </div>
           <div className="flex items-center pb-2 pt-6">
             <RefreshCcw className="h-5 w-5 text-gray-500" />
-            <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
+            <h3 className="ml-2 text-sm text-gray-500 ">Обновлено только что</h3>
           </div>
         </div>
       </CardContent>

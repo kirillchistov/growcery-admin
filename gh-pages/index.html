@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Growcery Admin — демо</title>
+    <meta
+      name="description"
+      content="Административная панель Growcery: клиенты, проекты, счета и аналитика."
+    />
+    <link rel="icon" href="./logo.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f172a;
+        --card: #1e293b;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --accent: #22c55e;
+        --accent-hover: #16a34a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 48px 24px 64px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      header img {
+        width: 48px;
+        height: 48px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin: 8px 0 0;
+      }
+
+      .card {
+        background: rgba(30, 41, 59, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        backdrop-filter: blur(8px);
+      }
+
+      .card h2 {
+        margin-top: 0;
+        font-size: 1.25rem;
+      }
+
+      ul {
+        padding-left: 20px;
+        line-height: 1.8;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #052e16;
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+
+      .btn-secondary {
+        background: rgba(148, 163, 184, 0.15);
+        color: var(--text);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(148, 163, 184, 0.25);
+      }
+
+      code {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      footer {
+        margin-top: 48px;
+        color: var(--muted);
+        font-size: 0.875rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="./logo.svg" alt="Growcery" />
+        <div>
+          <h1>Growcery Admin</h1>
+          <p class="subtitle">Административная панель для eGrocery</p>
+        </div>
+      </header>
+
+      <div class="card">
+        <h2>О проекте</h2>
+        <p class="note">
+          Next.js 15 приложение с аутентификацией, PostgreSQL и Drizzle ORM.
+          GitHub Pages показывает эту статическую страницу; полная интерактивная
+          версия требует серверного окружения (Vercel или self-hosted).
+        </p>
+        <ul>
+          <li>Дашборд с аналитикой и графиком выручки</li>
+          <li>Управление клиентами, проектами и счетами</li>
+          <li>NextAuth + PostgreSQL + Drizzle ORM</li>
+        </ul>
+        <div class="actions">
+          <a
+            class="btn btn-primary"
+            href="https://github.com/kirillchistov/growcery-admin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Исходный код
+          </a>
+          <a
+            class="btn btn-secondary"
+            href="https://github.com/kirillchistov/growcery-admin#установка"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Инструкция по установке
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Локальный запуск</h2>
+        <pre
+          style="
+            background: rgba(15, 23, 42, 0.6);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.6;
+          "
+        ><code>git clone https://github.com/kirillchistov/growcery-admin.git
+cd growcery-admin
+pnpm install
+cp .env.example .env.local
+pnpm db:push && pnpm db:seed
+pnpm dev</code></pre>
+        <p class="note">
+          Тестовый вход: <code>user@nextmail.com</code> / <code>123456</code>
+        </p>
+      </div>
+
+      <footer>Points Ecom · Growcery Admin</footer>
+    </div>
+  </body>
+</html>

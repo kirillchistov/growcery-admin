@@ -11,32 +11,33 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Invoices',
+  title: 'Счета',
 }
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     query?: string
     page?: string
-  }
+  }>
 }) {
-  const query = searchParams?.query || ''
-  const currentPage = Number(searchParams?.page) || 1
+  const params = await searchParams
+  const query = params?.query || ''
+  const currentPage = Number(params?.page) || 1
 
   const totalPages = await fetchInvoicesPages(query)
 
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className={`${inter.className} text-2xl`}>Invoices</h1>
+        <h1 className={`${inter.className} text-2xl`}>Счета</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search invoices..." />
+        <Search placeholder="Поиск счета..." />
         <Button asChild>
           <Link href="/dashboard/invoices/create">
-            <span className="hidden md:block">Create Invoice</span>
+            <span className="hidden md:block">Создать счет</span>
             <PlusIcon className="h-5 md:ml-4" />
           </Link>
         </Button>

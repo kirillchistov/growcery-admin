@@ -4,16 +4,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Files, HomeIcon, UsersIcon } from 'lucide-react'
+import { Files, FolderKanban, HomeIcon, UsersIcon } from 'lucide-react'
 
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Главная', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Invoices',
+    name: 'Счета',
     href: '/dashboard/invoices',
     icon: Files,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UsersIcon },
+  { name: 'Клиенты', href: '/dashboard/customers', icon: UsersIcon },
+  { name: 'Проекты', href: '/dashboard/projects', icon: FolderKanban },
+  // { name: 'Дашборды', href: '/dashboard/dashboards', icon: UsersIcon },
 ]
 
 export default function NavLinks() {

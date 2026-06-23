@@ -1,5 +1,7 @@
 import SideNav from '@/components/shared/dashboard/sidenav'
 
+export const dynamic = 'force-dynamic'
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-screen md:flex-row md:overflow-hidden">

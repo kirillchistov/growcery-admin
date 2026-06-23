@@ -20,15 +20,15 @@ export default async function StatCardsWrapper() {
 
   return (
     <>
-      <StatCard title="Collected" value={totalPaidInvoices} type="collected" />
-      <StatCard title="Pending" value={totalPendingInvoices} type="pending" />
+      <StatCard title="Получено" value={totalPaidInvoices} type="collected" />
+      <StatCard title="В ожидании" value={totalPendingInvoices} type="pending" />
       <StatCard
-        title="Total Invoices"
+        title="Всего счетов"
         value={numberOfInvoices}
         type="invoices"
       />
       <StatCard
-        title="Total Customers"
+        title="Всего клиентов"
         value={numberOfCustomers}
         type="customers"
       />

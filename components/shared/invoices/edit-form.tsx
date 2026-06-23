@@ -28,7 +28,7 @@ export default function EditInvoiceForm({
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+            Клиент
           </label>
           <div className="relative">
             <select
@@ -39,7 +39,7 @@ export default function EditInvoiceForm({
               aria-describedby="customer-error"
             >
               <option value="" disabled>
-                Select a customer
+                Выберите клиента
               </option>
               {customers.map((customer) => (
                 <option key={customer.id} value={customer.id}>
@@ -63,7 +63,7 @@ export default function EditInvoiceForm({
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
+            Сумма счета
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -73,11 +73,11 @@ export default function EditInvoiceForm({
                 type="number"
                 defaultValue={invoice.amount}
                 step="0.01"
-                placeholder="Enter USD amount"
+                placeholder="Укажите сумму счета в рублях"
                 className="peer block w-full rounded-md border   py-2 pl-10 text-sm outline-2  "
                 aria-describedby="amount-error"
               />
-              <DollarSignIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
+              {/* <DollarSignIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " /> */}
             </div>
           </div>
 
@@ -94,7 +94,7 @@ export default function EditInvoiceForm({
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
+            Укажите статус оплаты счета
           </legend>
           <div className="rounded-md border  px-[14px] py-3">
             <div className="flex gap-4">
@@ -111,7 +111,7 @@ export default function EditInvoiceForm({
                   htmlFor="pending"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full  px-3 py-1.5 text-xs font-medium  "
                 >
-                  Pending <ClockIcon className="h-4 w-4" />
+                  Ожидает оплаты <ClockIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -127,7 +127,7 @@ export default function EditInvoiceForm({
                   htmlFor="paid"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full   px-3 py-1.5 text-xs font-medium  "
                 >
-                  Paid <CheckIcon className="h-4 w-4" />
+                  Оплачен <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
             </div>
@@ -150,10 +150,10 @@ export default function EditInvoiceForm({
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Button variant="ghost">
-          <Link href="/dashboard/invoices">Cancel</Link>
+          <Link href="/dashboard/invoices">Отмена</Link>
         </Button>
 
-        <Button type="submit">Edit Invoice</Button>
+        <Button type="submit">Редактировать счет</Button>
       </div>
     </form>
   )

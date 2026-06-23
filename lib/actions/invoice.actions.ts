@@ -39,8 +39,8 @@ export async function fetchCardData() {
       totalPendingInvoices,
     }
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch card data.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить данные по карточкам.')
   }
 }
 
@@ -49,8 +49,8 @@ export async function fetchRevenue() {
     const data = await db.select().from(revenue)
     return data
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch the revenues.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить данные по выручке.')
   }
 }
 export async function fetchLatestInvoices() {
@@ -75,8 +75,8 @@ export async function fetchLatestInvoices() {
 
     return latestInvoices
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch the latest invoices.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить последние счета.')
   }
 }
 
@@ -84,9 +84,9 @@ export async function deleteInvoice(id: string) {
   try {
     await db.delete(invoices).where(eq(invoices.id, id))
     revalidatePath('/dashboard/invoices')
-    return { message: 'Deleted Invoice' }
+    return { message: 'Счет удален' }
   } catch (error) {
-    return { message: 'Database Error: Failed to Delete Invoice.' }
+    return { message: 'Ошибка БД: Не удалось удалить счет.' }
   }
 }
 
@@ -121,8 +121,8 @@ export async function fetchFilteredInvoices(
 
     return data
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch invoices.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить счета')
   }
 }
 
@@ -144,21 +144,21 @@ export async function fetchInvoicesPages(query: string) {
     const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE)
     return totalPages
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch total number of invoices.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить количество счетов.')
   }
 }
 
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
-    invalid_type_error: 'Please select a customer.',
+    invalid_type_error: 'Пожалуйста, выберите клиента.',
   }),
   amount: z.coerce
     .number()
-    .gt(0, { message: 'Please enter an amount greater than $0.' }),
-  status: z.enum(['pending', 'paid'], {
-    invalid_type_error: 'Please select an invoice status.',
+    .gt(0, { message: 'Пожалуйста, укажите сумму больше нуля.' }),
+  status: z.enum(['ожидает оплаты', 'оплачен'], {
+    invalid_type_error: 'Пожалуйста, выберите статус оплаты.',
   }),
   date: z.string(),
 })
@@ -186,7 +186,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: 'Не заполнены обязательные поля. Счет не был создан.',
     }
   }
 
@@ -206,7 +206,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   } catch (error) {
     // If a database error occurs, return a more specific error.
     return {
-      message: 'Database Error: Failed to Create Invoice.',
+      message: 'Ошибка БД: Не удалось создать счет.',
     }
   }
   // Revalidate the cache for the invoices page and redirect the user.
@@ -228,7 +228,7 @@ export async function updateInvoice(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Invoice.',
+      message: 'Не заполнены обязательные поля. Счет не был обновлен.',
     }
   }
 
@@ -245,7 +245,7 @@ export async function updateInvoice(
       })
       .where(eq(invoices.id, id))
   } catch (error) {
-    return { message: 'Database Error: Failed to Update Invoice.' }
+    return { message: 'Ошибка БД: Не удалось обновить счет.' }
   }
   revalidatePath('/dashboard/invoices')
   redirect('/dashboard/invoices')
@@ -273,7 +273,7 @@ export async function fetchInvoiceById(id: string) {
 
     return invoice[0] as InvoiceForm
   } catch (error) {
-    console.error('Database Error:', error)
-    throw new Error('Failed to fetch invoice.')
+    console.error('Ошибка БД:', error)
+    throw new Error('Не удалось загрузить счет.')
   }
 }

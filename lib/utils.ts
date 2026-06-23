@@ -16,15 +16,15 @@ export function capitalizeFirstLetter(text: string) {
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'RUB',
   })
 }
 
 export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = 'en-US'
+  dateStr: string | Date,
+  locale: string = 'ru-RU'
 ) => {
-  const date = new Date(dateStr)
+  const date = dateStr instanceof Date ? dateStr : new Date(dateStr)
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',

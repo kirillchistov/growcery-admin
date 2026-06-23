@@ -54,6 +54,21 @@ export function InvoiceSkeleton() {
   )
 }
 
+export function ProjectSkeleton() {
+  return (
+    <div className="flex flex-row items-center justify-between border-b   py-4">
+      <div className="flex items-center space-x-4">
+        <Skeleton className="w-6 h-6 rounded-full" />
+        <div className="min-w-0 space-y-2">
+          <Skeleton className="w-20 h-6" />
+          <Skeleton className="w-20 h-6" />
+        </div>
+      </div>
+      <Skeleton className="w-20 h-6" />
+    </div>
+  )
+}
+
 export function LatestInvoicesSkeleton() {
   return (
     <Card className="flex w-full flex-col md:col-span-4">
@@ -73,6 +88,25 @@ export function LatestInvoicesSkeleton() {
   )
 }
 
+export function LatestProjectsSkeleton() {
+  return (
+    <Card className="flex w-full flex-col md:col-span-4">
+      <CardHeader>
+        <Skeleton className="w-36 h-6 mb-4" />
+      </CardHeader>
+      <CardContent>
+        <div>
+          <ProjectSkeleton />
+          <ProjectSkeleton />
+          <ProjectSkeleton />
+          <ProjectSkeleton />
+          <ProjectSkeleton />
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function DashboardSkeleton() {
   return (
     <>
@@ -86,12 +120,38 @@ export default function DashboardSkeleton() {
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <RevenueChartSkeleton />
         <LatestInvoicesSkeleton />
+        {/* <LatestProjectsSkeleton /> */}
       </div>
     </>
   )
 }
 
 export function InvoicesMobileSkeleton() {
+  return (
+    <div className="mb-2 w-full rounded-md  p-4">
+      <div className="flex items-center justify-between border-b   pb-8">
+        <div className="flex items-center">
+          <Skeleton className="w-6 h-6 rounded-full" />
+          <Skeleton className="w-16 h-6" />
+        </div>
+        <Skeleton className="w-16 h-6" />
+      </div>
+      <div className="flex w-full items-center justify-between pt-4">
+        <div>
+          <Skeleton className="w-16 h-6" />
+          <Skeleton className="mt-2 h-6 w-24 rounded" />
+          <Skeleton className="mt-2 h-6 w-24 rounded" />
+        </div>
+        <div className="flex justify-end gap-2">
+          <Skeleton className="w-10 h-10" />
+          <Skeleton className="w-10 h-10" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function ProjectsMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md  p-4">
       <div className="flex items-center justify-between border-b   pb-8">
@@ -170,19 +230,73 @@ export function InvoicesTableSkeleton() {
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
+                  Клиент
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Email
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
+                  Сумма
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date
+                  Дата
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  Статус
+                </th>
+                <th
+                  scope="col"
+                  className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6"
+                >
+                  <span className="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function ProjectsTableSkeleton() {
+  return (
+    <div className="mt-6 flow-root">
+      <div className="inline-block min-w-full align-middle">
+        <div className="rounded-lg   p-2 md:pt-0">
+          <div className="md:hidden">
+            <ProjectsMobileSkeleton />
+            <ProjectsMobileSkeleton />
+            <ProjectsMobileSkeleton />
+            <ProjectsMobileSkeleton />
+            <ProjectsMobileSkeleton />
+            <ProjectsMobileSkeleton />
+          </div>
+          <table className="hidden min-w-full md:table">
+            <thead className="rounded-lg text-left text-sm font-normal">
+              <tr>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  Клиент
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Email
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Сумма
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Дата
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Статус
                 </th>
                 <th
                   scope="col"
